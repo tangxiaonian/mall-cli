@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/mall-admin/mall-admin.iml" filepath="$PROJECT_DIR$/mall-admin/mall-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mall-auth/mall-auth.iml" filepath="$PROJECT_DIR$/mall-auth/mall-auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/mall-cli.iml" filepath="$PROJECT_DIR$/.idea/mall-cli.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mall-common/mall-common.iml" filepath="$PROJECT_DIR$/mall-common/mall-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mall-gateway/mall-gateway.iml" filepath="$PROJECT_DIR$/mall-gateway/mall-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mall-monitor/mall-monitor.iml" filepath="$PROJECT_DIR$/mall-monitor/mall-monitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mall-portal/mall-portal.iml" filepath="$PROJECT_DIR$/mall-portal/mall-portal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mall-search/mall-search.iml" filepath="$PROJECT_DIR$/mall-search/mall-search.iml" />
+    </modules>
+  </component>
+</project>
