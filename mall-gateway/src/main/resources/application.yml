@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: mall-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        group: mall
+        namespace: 3ed108bd-a058-434b-858a-5fc4db30e4ce
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: mall-auth
+          uri: lb://mall-auth
+          predicates:
+            - Method=GET,POST
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+
+        - id: mall-admin
+          uri: lb://mall-admin
+          predicates:
+            - Method=GET,POST
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+server:
+  port: 9081

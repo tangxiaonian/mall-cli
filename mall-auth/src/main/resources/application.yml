@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: mall-auth
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        group: mall
+        namespace: 3ed108bd-a058-434b-858a-5fc4db30e4ce
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+server:
+  port: 9082
+
+#logging:
+#  level:
+#    root: debug
