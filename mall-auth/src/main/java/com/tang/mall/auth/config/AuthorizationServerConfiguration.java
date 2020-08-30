@@ -38,14 +38,12 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-
         security.checkTokenAccess("isAuthenticated()")
                 .allowFormAuthenticationForClients();
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
         clients.inMemory()
                 .withClient("clientId")
                 .secret(bCryptPasswordEncoder.encode("secret"))

@@ -1,16 +1,11 @@
-package com.tang.mall.auth.config;
+package com.tang.mall.gateway.config;
 
-import com.tang.mall.auth.service.UserDetailsServiceImpl;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
-import javax.annotation.Resource;
 
 /**
  * @Classname WebSecurityConfiguration
@@ -24,8 +19,6 @@ import javax.annotation.Resource;
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Resource
-    public UserDetailsServiceImpl userDetailsService;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -38,13 +31,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/v2/api-docs").permitAll()
                 .anyRequest().authenticated();
-
-        http.userDetailsService(userDetailsService);
     }
 
-    @Override
-    @Bean
-    protected AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
-    }
 }

@@ -29,6 +29,18 @@ spring:
           filters:
             - StripPrefix=1
 
+security:
+  oauth2:
+    client:
+      client-id: clientId
+      client-secret: secret
+      access-token-uri: http://localhost:8092/oauth/token
+      user-authorization-uri: http://localhost:8092/oauth/authorize
+    resource:
+      token-info-uri: http://localhost:8092/oauth/check_token
+      token-type:
+# todo
+
 management:
   endpoints:
     web:
