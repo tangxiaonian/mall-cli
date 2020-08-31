@@ -2,10 +2,10 @@
 微服务项目脚手架
 
 # mall-auth
-port: 8082
+port: 8092
 
 # mall-gateway
-port: 8081
+port: 8091
 
 # mall-admin
-port: 8083
+port: 8093

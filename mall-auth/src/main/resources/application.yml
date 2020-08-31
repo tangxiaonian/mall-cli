@@ -7,7 +7,12 @@ spring:
         server-addr: 127.0.0.1:8848
         group: mall
         namespace: 3ed108bd-a058-434b-858a-5fc4db30e4ce
-
+  redis:
+    host: 127.0.0.1
+    port: 7379
+    lettuce:
+      pool:
+        max-idle: 8
 
 management:
   endpoints:
@@ -21,3 +26,7 @@ server:
 #logging:
 #  level:
 #    root: debug
+security:
+  oauth2:
+    resource:
+      token-type:

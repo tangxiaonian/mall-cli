@@ -33,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<GrantedAuthority> list = new ArrayList<>();
         list.add(new SimpleGrantedAuthority("USER"));
         list.add(new SimpleGrantedAuthority("ADMIN"));
-        return new User(list, bCryptPasswordEncoder.encode("123456"), account, true,
-                true, true, true);
+        return new User(1L,"admin-app",list, bCryptPasswordEncoder.encode("123456"),
+                account, true, true, true, true);
     }
 }

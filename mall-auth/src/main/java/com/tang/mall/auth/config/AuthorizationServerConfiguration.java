@@ -2,6 +2,8 @@ package com.tang.mall.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -9,10 +11,16 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Classname AuthorizationServerConfiguration
@@ -21,6 +29,7 @@ import javax.annotation.Resource;
  * @Date 2020/8/30 18:39
  * @Created by ASUS
  */
+@Import(JwtAccessTokenConverter.class)
 @EnableAuthorizationServer
 @Configuration
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
@@ -31,9 +40,19 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Resource
     public AuthenticationManager authenticationManager;
 
+    @Resource
+    public JwtTokenEnhancer jwtTokenEnhancer;
+
+    @Resource
+    public JwtAccessTokenConverter jwtAccessTokenConverter;
+
+    /**
+     * redis 方式生成token
+     * @return
+     */
     @Bean
     public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+        return new JwtTokenStore(jwtAccessTokenConverter);
     }
 
     @Override
@@ -45,7 +64,15 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("clientId")
+                .withClient("admin-app")
+                .secret(bCryptPasswordEncoder.encode("secret"))
+                .scopes("scope")
+                .authorizedGrantTypes("password", "refresh_token")
+                .resourceIds("backend")
+                .accessTokenValiditySeconds(60 * 60 * 24)
+                .refreshTokenValiditySeconds(60 * 60 * 24 * 30)
+                .and()
+                .withClient("portal-app")
                 .secret(bCryptPasswordEncoder.encode("secret"))
                 .scopes("scope")
                 .authorizedGrantTypes("password", "refresh_token")
@@ -56,8 +83,18 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        // 增强器集合
+        List<TokenEnhancer> tokenEnhancerList = new ArrayList<>();
+        tokenEnhancerList.add(jwtTokenEnhancer);
+        tokenEnhancerList.add(jwtAccessTokenConverter);
+
+        TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+        enhancerChain.setTokenEnhancers(tokenEnhancerList);
+
         endpoints
                 .tokenStore(tokenStore())
+                .tokenEnhancer(enhancerChain)
+                .accessTokenConverter(jwtAccessTokenConverter)
                 .authenticationManager(authenticationManager);
     }
 }

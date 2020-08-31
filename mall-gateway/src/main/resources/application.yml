@@ -38,8 +38,6 @@ security:
       user-authorization-uri: http://localhost:8092/oauth/authorize
     resource:
       token-info-uri: http://localhost:8092/oauth/check_token
-      token-type:
-# todo
 
 management:
   endpoints:

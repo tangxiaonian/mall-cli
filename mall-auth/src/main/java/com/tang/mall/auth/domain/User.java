@@ -20,6 +20,16 @@ import java.util.Collection;
 @AllArgsConstructor
 public class User implements UserDetails {
 
+    /**
+     * 用户id
+     */
+    private Long id;
+
+    /**
+     * 登录客户端ID
+     */
+    private String clientId;
+
     private Collection<? extends GrantedAuthority> authorities;
 
     private String password;

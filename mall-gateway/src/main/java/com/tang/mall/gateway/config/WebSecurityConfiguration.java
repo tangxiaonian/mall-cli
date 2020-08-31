@@ -19,7 +19,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
