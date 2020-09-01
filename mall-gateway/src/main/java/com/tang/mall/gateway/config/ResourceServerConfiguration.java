@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 
 /**
  * @Classname ResourceServerConfiguration
- * @Description [ TODO ]
+ * @Description [ 资源服务器配置 ]
  * @Author Tang
  * @Date 2020/8/30 18:40
  * @Created by ASUS

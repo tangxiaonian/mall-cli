@@ -21,14 +21,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
+        web.ignoring()
+                .mvcMatchers("/v2/api-docs")
+                .mvcMatchers("/swagger-resources/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.authorizeRequests()
-                .mvcMatchers("/v2/api-docs").permitAll()
                 .anyRequest().authenticated();
     }
 

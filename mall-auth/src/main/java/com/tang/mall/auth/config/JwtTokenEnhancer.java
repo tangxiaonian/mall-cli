@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * @Classname JwtTokenEnhancer
- * @Description [ jwt内容增强器 ]
+ * @Description [ jwt token 内容增强器 ]
  * @Author Tang
  * @Date 2020/8/31 21:45
  * @Created by ASUS
@@ -27,6 +27,7 @@ public class JwtTokenEnhancer implements TokenEnhancer {
         Map<String, Object> info = new HashMap<>();
         //把用户ID设置到JWT中
         info.put("id", principal.getId());
+        // 客户端平台
         info.put("client_id",principal.getClientId());
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(info);
         return accessToken;

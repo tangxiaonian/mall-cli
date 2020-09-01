@@ -9,7 +9,7 @@ spring:
         namespace: 3ed108bd-a058-434b-858a-5fc4db30e4ce
   redis:
     host: 127.0.0.1
-    port: 7379
+    port: 6379
     lettuce:
       pool:
         max-idle: 8
