@@ -47,23 +47,6 @@ public class SwaggerResourceConfig implements SwaggerResourcesProvider {
         });
 //        api文档聚合接口形式：
 //        resources.add(swaggerResource("mall-auth-api", "http://localhost:9082/v2/api-docs?group=mall-auth-api"));
-
-//        gatewayProperties.getRoutes()
-//                .stream()
-//                .filter(routeDefinition -> routes.contains(routeDefinition.getId()))
-//                .filter(routeDefinition -> {
-//                    return routes.contains(routeDefinition.getId());
-//                }).forEach(route -> {
-//            route.getPredicates().stream()
-//                    .filter(predicateDefinition -> {
-//                        System.out.println("predicate name-->" + predicateDefinition.getName());
-//                        return ("Path").equalsIgnoreCase(predicateDefinition.getName());
-//                    }).forEach(predicateDefinition -> {
-//                predicateDefinition.getArgs().forEach((key, value) -> {
-//                    System.out.println("key--->" + key + ",value--->" + value);
-//                });
-//            });
-//        });
         return resources;
     }
 
