@@ -6,7 +6,8 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
         group: mall
-        namespace: 3ed108bd-a058-434b-858a-5fc4db30e4ce
+#        namespace: 3ed108bd-a058-434b-858a-5fc4db30e4ce
+        namespace: a6f95764-e0b0-43f3-8df9-0ddfc53b31fb
   redis:
     host: 127.0.0.1
     port: 6379
