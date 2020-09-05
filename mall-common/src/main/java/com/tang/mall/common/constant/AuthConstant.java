@@ -2,7 +2,7 @@ package com.tang.mall.common.constant;
 
 /**
  * @Classname AuthConstant
- * @Description [ TODO ]
+ * @Description [ 权限常量定义 ]
  * @Author Tang
  * @Date 2020/8/31 22:42
  * @Created by ASUS

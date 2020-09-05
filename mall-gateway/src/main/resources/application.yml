@@ -50,3 +50,17 @@ management:
 
 server:
   port: 9081
+
+secure:
+  ignore:
+    urls:
+      - "/oauth/login"
+      - "/v2/api-docs/**"
+      - "/doc.html"
+      - "/swagger-resources/**"
+      - "/swagger/**"
+      - "/**/v2/api-docs"
+      - "/**/*.js"
+      - "/**/*.css"
+      - "/**/*.png"
+      - "/**/*.ico"
