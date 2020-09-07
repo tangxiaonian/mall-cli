@@ -1,5 +1,6 @@
 package com.tang.mall.gateway.authorization;
 
+import com.nimbusds.jose.JWSObject;
 import com.tang.mall.common.constant.AuthConstant;
 import com.tang.mall.gateway.config.IgnoreUrlsConfig;
 import org.springframework.http.HttpMethod;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 
 /**
  * @Classname AuthorizationManager
@@ -58,9 +60,13 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
             return Mono.just(new AuthorizationDecision(false));
         }
         String realToken = token.replace(AuthConstant.JWT_TOKEN_PREFIX, "");
-
-
-
+        try {
+            // 解析jwt生成的token
+            JWSObject jwsObject = JWSObject.parse(realToken);
+            jwsObject.getPayload().toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return Mono.just(new AuthorizationDecision(false));
     }
 
