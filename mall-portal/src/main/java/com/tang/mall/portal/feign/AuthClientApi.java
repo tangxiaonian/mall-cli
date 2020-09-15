@@ -14,8 +14,8 @@ import java.util.Map;
 @FeignClient(value = "mall-auth")
 public interface AuthClientApi {
 
-    @RequestMapping(value = "/token", method= RequestMethod.POST)
+    @RequestMapping(value = "/token", method = RequestMethod.POST)
     public CommonResult<Oauth2TokenDto> postAccessToken(Principal principal,
-                                                        @RequestParam Map<String, String> parameters)
+                                                        @RequestParam Map<String, String> parameters);
 
 }
