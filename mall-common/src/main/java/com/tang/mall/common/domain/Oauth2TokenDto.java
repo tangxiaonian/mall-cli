@@ -1,4 +1,4 @@
-package com.tang.mall.auth.domain;
+package com.tang.mall.common.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

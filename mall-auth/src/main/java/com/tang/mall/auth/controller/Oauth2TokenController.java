@@ -1,6 +1,6 @@
 package com.tang.mall.auth.controller;
 
-import com.tang.mall.auth.domain.Oauth2TokenDto;
+import com.tang.mall.common.domain.Oauth2TokenDto;
 import com.tang.mall.common.api.CommonResult;
 import com.tang.mall.common.constant.AuthConstant;
 import org.springframework.beans.factory.annotation.Autowired;

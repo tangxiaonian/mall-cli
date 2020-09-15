@@ -63,7 +63,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         try {
             // 解析jwt生成的token
             JWSObject jwsObject = JWSObject.parse(realToken);
-            jwsObject.getPayload().toString();
+            String userStr = jwsObject.getPayload().toString();
         } catch (ParseException e) {
             e.printStackTrace();
         }
