@@ -1,10 +1,10 @@
-package com.tang.mall.portal.service.impl;
+package com.tang.mall.admin.service.impl;
 
+import com.tang.mall.admin.feign.AuthClientApi;
+import com.tang.mall.admin.service.AdminService;
 import com.tang.mall.common.api.CommonResult;
 import com.tang.mall.common.constant.AuthConstant;
 import com.tang.mall.common.domain.Oauth2TokenDto;
-import com.tang.mall.portal.feign.AuthClientApi;
-import com.tang.mall.portal.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class AdminServiceImpl implements AdminService {
 
     @Resource
     public AuthClientApi authClientApi;
@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean login(String username, String password) {
         Map<String, String> mapData = new HashMap<>();
-        mapData.put("client_id", AuthConstant.PORTAL_CLIENT_ID);
+        mapData.put("client_id", AuthConstant.ADMIN_CLIENT_ID);
         mapData.put("grant_type", "password");
         mapData.put("client_secret","secret");
         mapData.put("username", username);

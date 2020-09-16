@@ -1,4 +1,5 @@
-package com.tang.mall.portal.feign;
+package com.tang.mall.admin.feign;
+
 
 import com.tang.mall.common.api.CommonResult;
 import com.tang.mall.common.domain.Oauth2TokenDto;
