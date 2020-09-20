@@ -82,7 +82,8 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                 return Mono.just(new AuthorizationDecision(true));
             }
             // 管理端路径需要验证权限
-
+            // 权限格式：role_map  /mall-admin/brand/**  3_订单管理员,2_订单管理员
+            //                   /mall-admin/product/**  3_订单管理员,2_订单管理员
 
         } catch (ParseException e) {
             e.printStackTrace();
