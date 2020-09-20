@@ -1,7 +1,9 @@
 package com.tang.mall.gateway.authorization;
 
+import com.alibaba.fastjson.JSON;
 import com.nimbusds.jose.JWSObject;
 import com.tang.mall.common.constant.AuthConstant;
+import com.tang.mall.common.domain.UserDto;
 import com.tang.mall.gateway.config.IgnoreUrlsConfig;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -21,7 +23,7 @@ import java.text.ParseException;
 
 /**
  * @Classname AuthorizationManager
- * @Description [ 自定义认证接口管理 ]
+ * @Description [ 自定义认证接口管理,访问后端路径需要验证权限 ]
  * @Author Tang
  * @Date 2020/9/4 22:16
  * @Created by ASUS
@@ -64,6 +66,24 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
             // 解析jwt生成的token
             JWSObject jwsObject = JWSObject.parse(realToken);
             String userStr = jwsObject.getPayload().toString();
+            UserDto userDto = JSON.parseObject(userStr, UserDto.class);
+            // 后台登录,匹配路径请求是后台
+            if (AuthConstant.ADMIN_CLIENT_ID.equals(userDto.getClientId()) &&
+                    !pathMatcher.match(AuthConstant.ADMIN_URL_PATTERN, uriPath)) {
+                return Mono.just(new AuthorizationDecision(false));
+            }
+            // 前台登录，匹配路径是是后台
+            if (AuthConstant.PORTAL_CLIENT_ID.equals(userDto.getClientId()) &&
+                    pathMatcher.match(AuthConstant.ADMIN_URL_PATTERN, uriPath)) {
+                return Mono.just(new AuthorizationDecision(false));
+            }
+            // 非管理端路径直接放行
+            if (!pathMatcher.match(AuthConstant.ADMIN_URL_PATTERN, uriPath)) {
+                return Mono.just(new AuthorizationDecision(true));
+            }
+            // 管理端路径需要验证权限
+
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
