@@ -20,7 +20,6 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.tang.mall.common
-  #  config-location: classpath:mybatis-config.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   # 日志
     map-underscore-to-camel-case: true

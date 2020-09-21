@@ -8,5 +8,8 @@ package com.tang.mall.admin.service;
  * @Created by ASUS
  */
 public interface UmsResourceService {
+    /**
+     * 初始化资源
+     */
     void initResourceMap();
 }

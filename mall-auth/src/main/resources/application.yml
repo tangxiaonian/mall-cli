@@ -4,12 +4,9 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
-        group: mall
-#        namespace: 3ed108bd-a058-434b-858a-5fc4db30e4ce
-        namespace: a6f95764-e0b0-43f3-8df9-0ddfc53b31fb
+        server-addr: 59.110.68.225:8848
   redis:
-    host: 127.0.0.1
+    host: 59.110.68.225
     port: 6379
     lettuce:
       pool:
@@ -27,7 +24,3 @@ server:
 #logging:
 #  level:
 #    root: debug
-security:
-  oauth2:
-    resource:
-      token-type:
