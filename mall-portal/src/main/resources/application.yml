@@ -1,6 +1,6 @@
 spring:
   application:
-    name: mall-admin
+    name: mall-portal
   cloud:
     nacos:
       discovery:
@@ -33,5 +33,6 @@ management:
 
 server:
   port: 9083
+
 
 
