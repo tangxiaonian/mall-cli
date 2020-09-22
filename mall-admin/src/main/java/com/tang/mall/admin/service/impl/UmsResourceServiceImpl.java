@@ -1,10 +1,8 @@
 package com.tang.mall.admin.service.impl;
 
-import com.tang.mall.admin.domain.UmsPermission;
 import com.tang.mall.admin.domain.UmsResource;
 import com.tang.mall.admin.domain.UmsRole;
 import com.tang.mall.admin.domain.UmsRoleResourceRelation;
-import com.tang.mall.admin.mapper.UmsPermissionMapper;
 import com.tang.mall.admin.mapper.UmsResourceMapper;
 import com.tang.mall.admin.mapper.UmsRoleMapper;
 import com.tang.mall.admin.mapper.UmsRoleResourceRelationMapper;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
