@@ -8,6 +8,7 @@ spring:
   redis:
     host: 59.110.68.225
     port: 6379
+    password: ZS123456qwertyuiop
     lettuce:
       pool:
         max-idle: 8

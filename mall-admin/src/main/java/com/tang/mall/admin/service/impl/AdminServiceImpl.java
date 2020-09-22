@@ -1,8 +1,7 @@
 package com.tang.mall.admin.service.impl;
 import java.util.Date;
-import com.google.common.collect.Lists;
 
-import com.tang.mall.admin.domain.UmsRole;
+import com.tang.mall.common.domain.UmsRole;
 import com.tang.mall.admin.feign.AuthClientApi;
 import com.tang.mall.admin.service.AdminService;
 import com.tang.mall.common.api.CommonResult;
@@ -25,7 +24,7 @@ public class AdminServiceImpl implements AdminService {
     public AuthClientApi authClientApi;
 
     @Override
-    public boolean login(String username, String password) {
+    public CommonResult<Oauth2TokenDto> login(String username, String password) {
         Map<String, String> mapData = new HashMap<>();
         mapData.put("client_id", AuthConstant.ADMIN_CLIENT_ID);
         mapData.put("grant_type", "password");
@@ -33,7 +32,7 @@ public class AdminServiceImpl implements AdminService {
         mapData.put("username", username);
         mapData.put("password", password);
         CommonResult<Oauth2TokenDto> result = authClientApi.postAccessToken(mapData);
-        return result != null;
+        return result;
     }
 
     @Override
@@ -73,6 +72,6 @@ public class AdminServiceImpl implements AdminService {
                 .map( item ->  item.getId() + "_" + item.getName())
                 .collect(Collectors.toList())
         );
-        return null;
+        return userDto;
     }
 }

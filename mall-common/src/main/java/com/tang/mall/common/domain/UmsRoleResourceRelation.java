@@ -1,4 +1,4 @@
-package com.tang.mall.admin.domain;
+package com.tang.mall.common.domain;
 
 import javax.persistence.*;
 import lombok.AllArgsConstructor;

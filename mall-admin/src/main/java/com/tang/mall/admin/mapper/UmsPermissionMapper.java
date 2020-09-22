@@ -1,7 +1,7 @@
 package com.tang.mall.admin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tang.mall.admin.domain.UmsPermission;
+import com.tang.mall.common.domain.UmsPermission;
 
 /**
  * @Classname UmsPermissionMapper

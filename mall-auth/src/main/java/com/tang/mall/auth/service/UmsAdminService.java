@@ -1,5 +1,6 @@
 package com.tang.mall.auth.service;
 
+import com.tang.mall.common.api.CommonResult;
 import com.tang.mall.common.domain.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UmsAdminService {
 
     @GetMapping("/admin/loadByUsername")
-    UserDto loadUserByUsername(@RequestParam String username);
+    CommonResult<UserDto> loadUserByUsername(@RequestParam String username);
 
 }

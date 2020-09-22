@@ -1,8 +1,8 @@
 package com.tang.mall.admin.service.impl;
 
-import com.tang.mall.admin.domain.UmsResource;
-import com.tang.mall.admin.domain.UmsRole;
-import com.tang.mall.admin.domain.UmsRoleResourceRelation;
+import com.tang.mall.common.domain.UmsResource;
+import com.tang.mall.common.domain.UmsRole;
+import com.tang.mall.common.domain.UmsRoleResourceRelation;
 import com.tang.mall.admin.mapper.UmsResourceMapper;
 import com.tang.mall.admin.mapper.UmsRoleMapper;
 import com.tang.mall.admin.mapper.UmsRoleResourceRelationMapper;
@@ -13,9 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +48,7 @@ public class UmsResourceServiceImpl implements UmsResourceService {
         List<UmsResource> umsResourceList = umsResourceMapper.selectList(null);
         List<UmsRoleResourceRelation> umsRoleResourceRelations = umsRoleResourceRelationMapper.selectList(null);
 
-        Map<String,String> resourceRoleMap = new HashMap<>();
+        Map<String,List<String>> resourceRoleMap = new HashMap<>();
 
         umsRoles.forEach((item) -> {
             // 获取资源id
@@ -71,7 +69,11 @@ public class UmsResourceServiceImpl implements UmsResourceService {
                     .collect(Collectors.toList());
 
             resourcesNames.forEach(resourcesName -> {
-                resourceRoleMap.put(resourcesName,item.getId() + "_" + item.getName());
+                List<String> list = Optional.ofNullable(
+                        resourceRoleMap.get(resourcesName)
+                ).orElse(new ArrayList<>());
+                list.add(item.getId() + "_" + item.getName());
+                resourceRoleMap.put(resourcesName,list);
             });
 
         });
