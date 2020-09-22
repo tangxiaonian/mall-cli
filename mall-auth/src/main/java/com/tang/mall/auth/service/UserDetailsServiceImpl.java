@@ -1,6 +1,6 @@
 package com.tang.mall.auth.service;
 
-import com.tang.mall.auth.domain.User;
+import com.tang.mall.auth.domain.SecurityUser;
 import com.tang.mall.common.constant.AuthConstant;
 import com.tang.mall.common.domain.UserDto;
 import org.springframework.security.core.GrantedAuthority;
@@ -49,10 +49,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             userDto = umsUserService.loadUserByUsername(account);
         }
         System.out.println("验证用户信息...." + account);
-        List<GrantedAuthority> list = new ArrayList<>();
-        list.add(new SimpleGrantedAuthority("USER"));
-        list.add(new SimpleGrantedAuthority("ADMIN"));
-        return new User(1L,"admin-app",list, bCryptPasswordEncoder.encode("123456"),
-                account, true, true, true, true);
+        return new SecurityUser(userDto);
+//        List<GrantedAuthority> list = new ArrayList<>();
+//        list.add(new SimpleGrantedAuthority("USER"));
+//        list.add(new SimpleGrantedAuthority("ADMIN"));
+//        return new SecurityUser(1L,"admin-app",list, bCryptPasswordEncoder.encode("123456"),
+//                account, true, true, true, true);
     }
 }

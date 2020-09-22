@@ -5,11 +5,14 @@ import com.nimbusds.jose.JWSObject;
 import com.tang.mall.common.constant.AuthConstant;
 import com.tang.mall.common.domain.UserDto;
 import com.tang.mall.gateway.config.IgnoreUrlsConfig;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -20,6 +23,9 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Classname AuthorizationManager
@@ -28,11 +34,15 @@ import java.text.ParseException;
  * @Date 2020/9/4 22:16
  * @Created by ASUS
  */
+@Slf4j
 @Component
 public class AuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 
     @Resource
     public IgnoreUrlsConfig ignoreUrlsConfig;
+
+    @Resource
+    public RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication,
@@ -81,9 +91,39 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
             if (!pathMatcher.match(AuthConstant.ADMIN_URL_PATTERN, uriPath)) {
                 return Mono.just(new AuthorizationDecision(true));
             }
+            log.info("当前请求得路径为：--->" + uriPath);
             // 管理端路径需要验证权限
             // 权限格式：role_map  /mall-admin/brand/**  3_订单管理员,2_订单管理员
             //                   /mall-admin/product/**  3_订单管理员,2_订单管理员
+            Map<Object, Object> entries = redisTemplate.opsForHash()
+                    .entries(AuthConstant.RESOURCE_ROLES_MAP_KEY);
+            // 获取资源对应的所有角色名称
+            List<String> roleNames = entries.keySet().stream()
+                    .filter(item -> pathMatcher.match(item.toString(), uriPath))
+                    // 获取url对应的role_name
+                    .map(item_1 -> entries.get(item_1.toString()))
+                    .map(item_2 ->item_2.toString())
+                    .collect(Collectors.toList());
+
+            // 为什么不是通过 roles 集合对比
+            List<String> roles = userDto.getRoles();
+            System.out.println( "roles--->" );
+            roles.forEach(System.out::println);
+
+            // 获取最新的 角色列表
+            List<String> authorizations = roleNames
+                    .stream()
+                    .map(
+                            roleName -> AuthConstant.AUTHORITY_PREFIX + roleName
+                    ).collect(Collectors.toList());
+            // 验证角色
+            return authentication
+                    .filter(Authentication::isAuthenticated)
+                    .flatMapIterable(Authentication::getAuthorities)
+                    .map(GrantedAuthority::getAuthority)
+                    .any(authorizations::contains)
+                    .map(AuthorizationDecision::new)
+                    .defaultIfEmpty(new AuthorizationDecision(false));
 
         } catch (ParseException e) {
             e.printStackTrace();

@@ -1,12 +1,15 @@
 package com.tang.mall.auth.domain;
 
+import com.tang.mall.common.domain.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * @Classname User
@@ -18,7 +21,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-public class User implements UserDetails {
+public class SecurityUser implements UserDetails {
 
     /**
      * 用户id
@@ -44,4 +47,20 @@ public class User implements UserDetails {
 
     private boolean isEnabled;
 
+    public SecurityUser(UserDto userDto) {
+        this.clientId = userDto.getClientId();
+        this.id = Long.parseLong(userDto.getId());
+        this.username = userDto.getUsername();
+        this.password = userDto.getPassword();
+        this.setAuthorities(userDto
+                .getRoles()
+                .stream()
+                .map(item -> new SimpleGrantedAuthority(item))
+                .collect(Collectors.toList())
+        );
+        this.isAccountNonExpired = true;
+        this.isAccountNonLocked = true;
+        this.isCredentialsNonExpired = true;
+        this.isEnabled = true;
+    }
 }

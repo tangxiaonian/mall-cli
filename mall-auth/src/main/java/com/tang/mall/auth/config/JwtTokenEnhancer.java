@@ -1,6 +1,6 @@
 package com.tang.mall.auth.config;
 
-import com.tang.mall.auth.domain.User;
+import com.tang.mall.auth.domain.SecurityUser;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -23,7 +23,7 @@ public class JwtTokenEnhancer implements TokenEnhancer {
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken,
                                      OAuth2Authentication authentication) {
-        User principal = (User) authentication.getPrincipal();
+        SecurityUser principal = (SecurityUser) authentication.getPrincipal();
         Map<String, Object> info = new HashMap<>();
         //把用户ID设置到JWT中
         info.put("id", principal.getId());
