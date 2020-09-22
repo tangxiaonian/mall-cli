@@ -13,6 +13,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
   redis:
     host: 59.110.68.225
+    password: ZS123456qwertyuiop
     lettuce:
       pool:
         max-idle: 8

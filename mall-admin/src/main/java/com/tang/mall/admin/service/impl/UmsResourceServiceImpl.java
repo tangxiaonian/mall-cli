@@ -67,7 +67,7 @@ public class UmsResourceServiceImpl implements UmsResourceService {
                     .filter(item_1 -> {
                         return resourceIds.contains(item_1.getId());
                     })
-                    .map(item_2 -> "/" + applicationName + item_2.getName())
+                    .map(item_2 -> "/" + applicationName + item_2.getUrl())
                     .collect(Collectors.toList());
 
             resourcesNames.forEach(resourcesName -> {
