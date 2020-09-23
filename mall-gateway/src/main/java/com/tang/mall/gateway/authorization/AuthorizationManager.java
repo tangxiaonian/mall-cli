@@ -46,6 +46,12 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
     @Resource
     public RedisTemplate<String, Object> redisTemplate;
 
+    /**
+     * 自定义鉴权方法
+     * @param authentication 登录成功的用户信息
+     * @param authorizationContext
+     * @return
+     */
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication,
                                              AuthorizationContext authorizationContext) {

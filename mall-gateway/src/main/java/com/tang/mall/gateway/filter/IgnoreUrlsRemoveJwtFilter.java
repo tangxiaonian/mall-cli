@@ -42,7 +42,7 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
         if (ignoreUrlsConfig.getUrls().stream().anyMatch((ignoreUrl -> {
             return pathMatcher.match(ignoreUrl, uri.getPath());
         }))) {
-            System.out.println("白名单触发....");
+            System.out.println("白名单触发....清空头部信息...");
             request = serverWebExchange.getRequest().mutate()
                     .header(AuthConstant.JWT_TOKEN_HEADER, "").build();
             serverWebExchange = serverWebExchange.mutate()
