@@ -6,10 +6,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
-        group: mall
-#        namespace: 3ed108bd-a058-434b-858a-5fc4db30e4ce
-        namespace: a6f95764-e0b0-43f3-8df9-0ddfc53b31fb
+        server-addr: 59.110.68.225:8848
     gateway:
       discovery:
         locator:
@@ -21,26 +18,31 @@ spring:
           predicates:
             - Method=GET,POST
             - Path=/auth/**
-          filters:
-            - StripPrefix=1
 
         - id: mall-admin
           uri: lb://mall-admin
           predicates:
             - Method=GET,POST
             - Path=/admin/**
-          filters:
-            - StripPrefix=1
 
-security:
-  oauth2:
-    client:
-      client-id: admin-app
-      client-secret: secret
-      access-token-uri: http://localhost:8092/oauth/token
-      user-authorization-uri: http://localhost:8092/oauth/authorize
-    resource:
-      token-info-uri: http://localhost:8092/oauth/check_token
+        - id: mall-portal
+          uri: lb://mall-portal
+          predicates:
+            - Method=GET,POST
+            - Path=/portal/**
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: 'http://localhost:9082/rsa/publicKey' #配置RSA的公钥访问地址
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
 
 management:
   endpoints:
@@ -49,9 +51,9 @@ management:
         include: "*"
 
 server:
-  port: 9081
+  port: 8888
 
-secure:
+security:
   ignore:
     urls:
       - "/oauth/login"

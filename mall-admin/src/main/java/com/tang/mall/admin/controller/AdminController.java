@@ -22,6 +22,11 @@ public class AdminController {
     @Resource
     public AdminService adminService;
 
+    @GetMapping("/index")
+    public String index() {
+        return "admin get resource success....";
+    }
+
     @PostMapping("/loadByUsername")
     public CommonResult<UserDto> loadUserByUsername(@RequestParam String username) {
         return CommonResult.success(adminService.loadUserByUsername(username));

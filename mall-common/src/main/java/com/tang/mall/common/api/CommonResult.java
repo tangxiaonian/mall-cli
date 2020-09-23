@@ -1,9 +1,12 @@
 package com.tang.mall.common.api;
 
+import lombok.ToString;
+
 /**
  * 通用返回对象
  * Created by macro on 2019/4/19.
  */
+@ToString
 public class CommonResult<T> {
     private long code;
     private String message;

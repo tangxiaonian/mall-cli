@@ -15,6 +15,11 @@ public class UserController {
     @Resource
     public UserService userService;
 
+    @GetMapping("/index")
+    public String index() {
+        return "user get resource success....";
+    }
+
     @PostMapping("/login")
     public CommonResult<Oauth2TokenDto> login(String username, String password){
         return userService.login(username, password);

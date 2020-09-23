@@ -1,6 +1,7 @@
 package com.tang.mall.auth.service;
 
 import com.tang.mall.auth.domain.SecurityUser;
+import com.tang.mall.common.api.CommonResult;
 import com.tang.mall.common.constant.AuthConstant;
 import com.tang.mall.common.domain.UserDto;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,19 +38,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String account)
             throws UsernameNotFoundException {
+        System.out.println("验证用户信息...." + account);
         String clientId = request.getParameter("client_id");
-        UserDto userDto;
+        System.out.println("clientId..." + clientId);
+        CommonResult<UserDto> userDto;
+        // 从数据库根据账号获取用户信息
         if (AuthConstant.ADMIN_CLIENT_ID.equals(clientId)) {
             userDto = umsAdminService.loadUserByUsername(account);
         }else {
             userDto = umsUserService.loadUserByUsername(account);
         }
-        System.out.println("验证用户信息...." + account);
-        return new SecurityUser(userDto);
-//        List<GrantedAuthority> list = new ArrayList<>();
-//        list.add(new SimpleGrantedAuthority("USER"));
-//        list.add(new SimpleGrantedAuthority("ADMIN"));
-//        return new SecurityUser(1L,"admin-app",list, bCryptPasswordEncoder.encode("123456"),
-//                account, true, true, true, true);
+        userDto.getData().setPassword(
+                bCryptPasswordEncoder.encode(userDto.getData().getPassword())
+        );
+        return new SecurityUser(userDto.getData());
     }
 }

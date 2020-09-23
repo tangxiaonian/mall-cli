@@ -2,6 +2,7 @@ package com.tang.mall.gateway.filter;
 
 import com.tang.mall.common.constant.AuthConstant;
 import com.tang.mall.gateway.config.IgnoreUrlsConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,7 @@ import java.net.URI;
  * @Date 2020/9/4 22:34
  * @Created by ASUS
  */
+@Slf4j
 @Component
 public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
 
@@ -31,6 +33,7 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange serverWebExchange, WebFilterChain webFilterChain) {
+        log.info("白名单开始执行....");
         ServerHttpRequest request = serverWebExchange.getRequest();
         URI uri = request.getURI();
         // spring 路径匹配器
@@ -39,6 +42,7 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
         if (ignoreUrlsConfig.getUrls().stream().anyMatch((ignoreUrl -> {
             return pathMatcher.match(ignoreUrl, uri.getPath());
         }))) {
+            System.out.println("白名单触发....");
             request = serverWebExchange.getRequest().mutate()
                     .header(AuthConstant.JWT_TOKEN_HEADER, "").build();
             serverWebExchange = serverWebExchange.mutate()

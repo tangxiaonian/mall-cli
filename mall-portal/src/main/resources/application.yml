@@ -13,6 +13,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
   redis:
     host: 59.110.68.225
+    password: ZS123456qwertyuiop
     lettuce:
       pool:
         max-idle: 8
@@ -30,8 +31,17 @@ management:
       exposure:
         include: "*"
 
+# feign 调用超时配置
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+
 server:
-  port: 9083
+  port: 9084
 
 
 

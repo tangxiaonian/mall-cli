@@ -3,14 +3,17 @@ package com.tang.mall.auth.config;
 import com.tang.mall.auth.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
 import javax.annotation.Resource;
+import java.security.KeyPair;
 
 /**
  * @Classname WebSecurityConfiguration
@@ -36,7 +39,8 @@ public class WebMvcSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .mvcMatchers("/v2/api-docs").permitAll()
+                .mvcMatchers("/v2/api-docs","/rsa/publicKey")
+                .permitAll()
                 .anyRequest().authenticated();
 
         http.userDetailsService(userDetailsService);

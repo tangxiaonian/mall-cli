@@ -49,7 +49,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                                              AuthorizationContext authorizationContext) {
         ServerWebExchange serverWebExchange = authorizationContext.getExchange();
         ServerHttpRequest request = serverWebExchange.getRequest();
-
+        log.info( "AuthorizationManager.....调用开始...." );
         String uriPath = request.getURI().getPath();
         PathMatcher pathMatcher = new AntPathMatcher();
         // 1.匹配白名单

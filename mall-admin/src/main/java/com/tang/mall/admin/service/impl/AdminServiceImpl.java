@@ -8,6 +8,8 @@ import com.tang.mall.common.api.CommonResult;
 import com.tang.mall.common.constant.AuthConstant;
 import com.tang.mall.common.domain.Oauth2TokenDto;
 import com.tang.mall.common.domain.UserDto;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,12 +25,16 @@ public class AdminServiceImpl implements AdminService {
     @Resource
     public AuthClientApi authClientApi;
 
+    @Resource
+    public BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public CommonResult<Oauth2TokenDto> login(String username, String password) {
         Map<String, String> mapData = new HashMap<>();
         mapData.put("client_id", AuthConstant.ADMIN_CLIENT_ID);
         mapData.put("grant_type", "password");
         mapData.put("client_secret","secret");
+        mapData.put("scope","scope");
         mapData.put("username", username);
         mapData.put("password", password);
         CommonResult<Oauth2TokenDto> result = authClientApi.postAccessToken(mapData);
@@ -37,10 +43,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public UserDto loadUserByUsername(String username) {
+        System.out.println("调用了admin的loadUserByUsername....");
         UserDto userDto = new UserDto();
         userDto.setId("3");
         userDto.setUsername("管理员");
-        userDto.setPassword("111");
+        userDto.setPassword("123");
         userDto.setStatus(0);
         userDto.setClientId(AuthConstant.ADMIN_CLIENT_ID);
         // 从用户资源关系表表里面查询数据

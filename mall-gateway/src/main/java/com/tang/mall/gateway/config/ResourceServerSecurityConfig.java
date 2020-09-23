@@ -56,16 +56,17 @@ public class ResourceServerSecurityConfig {
      */
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        // 自定义错误处理，token过期，没登录错误提示。
-        http.oauth2ResourceServer()
-                .authenticationEntryPoint(restAuthenticationEntryPoint);
 
         http.oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(jwtAuthenticationConverter());
 
+        // 自定义错误处理，token过期，没登录错误提示。
+        http.oauth2ResourceServer()
+                .authenticationEntryPoint(restAuthenticationEntryPoint);
+
         // 在权限验证之前，添加一个白名单过滤器
-        http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.FORM_LOGIN);
+        http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
 
         // 权限路径匹配
         http.authorizeExchange()
@@ -90,14 +91,13 @@ public class ResourceServerSecurityConfig {
     @Bean
     public Converter<Jwt, ? extends Mono<? extends AbstractAuthenticationToken>> jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        // 权限前缀  todo
+        // 权限前缀  ROLE_
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix(AuthConstant.AUTHORITY_PREFIX);
-        // 权限名字
+        // 权限列表名字  authorities
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(AuthConstant.AUTHORITY_CLAIM_NAME);
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
     }
-
 
 }
