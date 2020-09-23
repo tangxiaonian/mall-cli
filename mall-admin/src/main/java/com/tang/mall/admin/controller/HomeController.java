@@ -1,4 +1,4 @@
-package com.tang.mall.auth.controller;
+package com.tang.mall.admin.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

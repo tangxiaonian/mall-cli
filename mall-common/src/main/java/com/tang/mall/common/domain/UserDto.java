@@ -13,5 +13,6 @@ public class UserDto {
     private String password;
     private Integer status;
     private String clientId;
-    private List<String> roles;
+    // 和 SecurityUser保持一致
+    private List<String> authorities;
 }

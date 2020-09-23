@@ -1,19 +1,32 @@
 package com.tang.mall.gateway;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import net.minidev.json.JSONObject;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainTest {
 
     private static final String key = "957668bba54432d125dd580806790484";
+
+
+    @Test
+    public void Test01() {
+        List<String> list = JSONArray.parseArray("['1_商品管理员', '5_超级管理员']", String.class);
+        System.out.println(list.size());
+
+
+
+    }
 
     public static void main(String[] args) throws Exception {
 //        getKey();

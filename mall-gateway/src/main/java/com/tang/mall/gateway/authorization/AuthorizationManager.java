@@ -1,6 +1,7 @@
 package com.tang.mall.gateway.authorization;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.nimbusds.jose.JWSObject;
 import com.tang.mall.common.constant.AuthConstant;
 import com.tang.mall.common.domain.UserDto;
@@ -23,6 +24,7 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -97,23 +99,25 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
             //                   /mall-admin/product/**  3_订单管理员,2_订单管理员
             Map<Object, Object> entries = redisTemplate.opsForHash()
                     .entries(AuthConstant.RESOURCE_ROLES_MAP_KEY);
-            // 获取资源对应的所有角色名称
+            // 获取资源url对应的角色集合
             List<String> roleNames = entries.keySet().stream()
                     .filter(item -> pathMatcher.match(item.toString(), uriPath))
-                    // 获取url对应的role_name
-                    .map(item_1 -> entries.get(item_1.toString()))
-                    .map(item_2 ->item_2.toString())
-                    .collect(Collectors.toList());
-
-            // 为什么不是通过 roles 集合对比
-            List<String> roles = userDto.getRoles();
-            System.out.println( "roles--->" );
-            roles.forEach(System.out::println);
+                    // 获取url对应的role_name 列表
+                    .map(item_1 -> (JSONArray.parseArray(entries.get(item_1.toString()).toString(), String.class)))
+                    .findFirst().orElse(new ArrayList<String>());
+            if (roleNames.size() == 0) {
+                return Mono.just(new AuthorizationDecision(false));
+            }
+            // 也可以通过 userDto.getAuthorities();  拿到角色列表
+//            List<String> roles = userDto.getAuthorities();
+//            System.out.println( "roles--->" );
+//            roles.forEach(System.out::println);
 
             // 获取最新的 角色列表
-            List<String> authorizations = roleNames
+            List<String> roles = roleNames
                     .stream()
                     .map(
+                            // ROLE_5_超级管理员
                             roleName -> AuthConstant.AUTHORITY_PREFIX + roleName
                     ).collect(Collectors.toList());
             // 验证角色
@@ -121,7 +125,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                     .filter(Authentication::isAuthenticated)
                     .flatMapIterable(Authentication::getAuthorities)
                     .map(GrantedAuthority::getAuthority)
-                    .any(authorizations::contains)
+                    .any(roles::contains)
                     .map(AuthorizationDecision::new)
                     .defaultIfEmpty(new AuthorizationDecision(false));
 

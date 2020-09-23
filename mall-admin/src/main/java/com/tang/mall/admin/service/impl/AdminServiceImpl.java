@@ -74,7 +74,7 @@ public class AdminServiceImpl implements AdminService {
 
         roleList.add(umsRole_1);
         roleList.add(umsRole_2);
-        userDto.setRoles( roleList
+        userDto.setAuthorities( roleList
                 .stream()
                 .map( item ->  item.getId() + "_" + item.getName())
                 .collect(Collectors.toList())

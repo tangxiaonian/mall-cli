@@ -3,6 +3,12 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: mall-gateway
+  redis:
+    host: 59.110.68.225
+    password: ZS123456qwertyuiop
+    lettuce:
+      pool:
+        max-idle: 8
   cloud:
     nacos:
       discovery:
@@ -17,19 +23,26 @@ spring:
           uri: lb://mall-auth
           predicates:
             - Method=GET,POST
-            - Path=/auth/**
+            - Path=/mall-auth/**
+          filters:
+            - StripPrefix=1
 
         - id: mall-admin
           uri: lb://mall-admin
           predicates:
             - Method=GET,POST
-            - Path=/admin/**
+            - Path=/mall-auth/**
+          filters:
+            - StripPrefix=1
 
         - id: mall-portal
           uri: lb://mall-portal
           predicates:
             - Method=GET,POST
-            - Path=/portal/**
+            - Path=/mall-portal/**
+          filters:
+            - StripPrefix=1
+
   security:
     oauth2:
       resourceserver:

@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         roleList.add(umsRole_1);
 //        roleList.add(umsRole_2);
         // 权限列表
-        userDto.setRoles( roleList
+        userDto.setAuthorities( roleList
                 .stream()
                 .map( item ->  item.getId() + "_" + item.getName())
                 .collect(Collectors.toList())

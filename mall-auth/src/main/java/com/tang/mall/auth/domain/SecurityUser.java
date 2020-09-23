@@ -52,10 +52,11 @@ public class SecurityUser implements UserDetails {
         this.id = Long.parseLong(userDto.getId());
         this.username = userDto.getUsername();
         this.password = userDto.getPassword();
+        // 设置角色权限列表
         this.setAuthorities(userDto
-                .getRoles()
+                .getAuthorities()
                 .stream()
-                .map(item -> new SimpleGrantedAuthority(item))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList())
         );
         this.isAccountNonExpired = true;
