@@ -24,6 +24,7 @@ public class AdminController {
 
     @GetMapping("/index")
     public String index() {
+        int i = 1 / 0;
         return "admin get resource success....";
     }
 

@@ -16,7 +16,6 @@ import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import java.net.URI;
 
-
 /**
  * @Classname IgnoreUrlsRemoveJwtFilter
  * @Description [ 白名单过滤器:只负责移除请求头 ]
