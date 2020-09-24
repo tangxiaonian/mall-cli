@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <!--引用默认日志配置-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!--使用默认的控制台日志输出实现-->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
     <appender name="LOG_STASH_DEBUG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>192.168.108.128:4560</destination>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -80,7 +85,7 @@
 
     <!--自定义接口访问记录日志输出到LogStash-->
     <appender name="LOG_STASH_RECORD" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>${LOG_STASH_HOST}:4563</destination>
+        <destination>192.168.108.128:4562</destination>
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp>
@@ -90,7 +95,7 @@
                 <pattern>
                     <pattern>
                         {
-                        "project": "mall-swarm",
+                        "project": "mall-debug",
                         "level": "%level",
                         "service": "${APP_NAME:-}",
                         "class": "%logger",
@@ -108,8 +113,8 @@
         </connectionStrategy>
     </appender>
 
-<!-- todo-->
-    <logger name="WebLogAspect" level="DEBUG">
+    <!-- 使用指定包下面的日志-->
+    <logger name="com.tang.mall.common.log.WebAspectLog" level="DEBUG">
         <appender-ref ref="LOG_STASH_RECORD"/>
     </logger>
 
