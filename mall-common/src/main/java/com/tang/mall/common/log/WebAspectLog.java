@@ -1,5 +1,6 @@
 package com.tang.mall.common.log;
 
+import com.alibaba.fastjson.JSONObject;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -16,8 +17,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Classname AspectLog
@@ -39,34 +41,57 @@ public class WebAspectLog {
     public void pointCut() {}
 
     @Around(value = "pointCut()")
-    public Object aroundMethod(JoinPoint joinPoint) {
+    public Object aroundMethod(ProceedingJoinPoint proceedingJoinPoint) {
 
-        ProceedingJoinPoint proceedingJoinPoint = (ProceedingJoinPoint) joinPoint;
+        System.out.println("*******");
+
+        Long startTime = System.currentTimeMillis();
+
+        WebLog webLog = new WebLog();
+        webLog.setStartTime(new Date());
+        webLog.setRequestType(servletRequest.getMethod());
+        webLog.setUrl(servletRequest.getRequestURL().toString());
+        webLog.setThrowableMessage(null);
 
         MethodSignature methodSignature = (MethodSignature)proceedingJoinPoint.getSignature();
 
         Object[] args = proceedingJoinPoint.getArgs();
 
+        Signature signature = proceedingJoinPoint.getSignature();
+
+        webLog.setClassName(signature.getDeclaringTypeName());
+        webLog.setMethodName(signature.getName());
+
+        Map<String, Object> parameterMap = new HashMap<>();
         Object result = null;
 
+        Method method = methodSignature.getMethod();
+        Parameter[] parameters = method.getParameters();
+        Parameter parameter = null;
+        for (int i = 0; i < args.length; i++,parameter = parameters[i]) {
+            ApiIgnore apiIgnore = parameter.getAnnotation(ApiIgnore.class);
+            if (apiIgnore == null) {
+                String parameterName = parameter.getName();
+                System.out.println("参数名:" + parameterName + ",参数值:" + args[i]);
+                parameterMap.put(parameterName, args[i]);
+            }
+        }
+        // 入参--->参数列表
+        webLog.setParameters(parameterMap);
         try {
-            Method method = methodSignature.getMethod();
-            Parameter[] parameters = method.getParameters();
-            Arrays.stream(parameters).forEach((parameter -> {
-                ApiIgnore apiIgnore = parameter.getAnnotation(ApiIgnore.class);
-                if (apiIgnore == null) {
-                    String parameterName = parameter.getName();
-                    String simpleName = parameter.getType().getSimpleName();
-                    System.out.println("参数名:" + parameterName + ",参数类型:" + simpleName);
-                }
-            }));
             result = proceedingJoinPoint.proceed(args);
+            webLog.setResult(result);
         } catch (Throwable throwable) {
-            throwable.getMessage();
+            webLog.setThrowableMessage(throwable.getMessage());
+            webLog.setStatus("ERROR");
             throwable.printStackTrace();
+        }finally {
+            webLog.setEndTime(new Date());
+            webLog.setSpeed(System.currentTimeMillis() - startTime);
+            String jsonString = JSONObject.toJSONString(webLog);
+            loggerFactory.info(jsonString);
         }
         return result;
     }
-
 
 }

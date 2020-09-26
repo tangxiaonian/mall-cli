@@ -51,6 +51,11 @@ public class WebLog {
      */
     private String throwableMessage;
 
+    /**
+     * 状态 NORMAL,ERROR
+     */
+    private String status = "NORMAL";
+
     private Date startTime;
 
     private Date endTime;
