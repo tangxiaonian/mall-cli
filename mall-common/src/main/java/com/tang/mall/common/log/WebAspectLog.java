@@ -43,15 +43,13 @@ public class WebAspectLog {
     @Around(value = "pointCut()")
     public Object aroundMethod(ProceedingJoinPoint proceedingJoinPoint) {
 
-        System.out.println("*******");
-
         Long startTime = System.currentTimeMillis();
 
         WebLog webLog = new WebLog();
         webLog.setStartTime(new Date());
         webLog.setRequestType(servletRequest.getMethod());
         webLog.setUrl(servletRequest.getRequestURL().toString());
-        webLog.setThrowableMessage(null);
+        webLog.setThrowable(null);
 
         MethodSignature methodSignature = (MethodSignature)proceedingJoinPoint.getSignature();
 
@@ -82,14 +80,17 @@ public class WebAspectLog {
             result = proceedingJoinPoint.proceed(args);
             webLog.setResult(result);
         } catch (Throwable throwable) {
-            webLog.setThrowableMessage(throwable.getMessage());
+            webLog.setThrowable(throwable);
             webLog.setStatus("ERROR");
-            throwable.printStackTrace();
         }finally {
             webLog.setEndTime(new Date());
             webLog.setSpeed(System.currentTimeMillis() - startTime);
             String jsonString = JSONObject.toJSONString(webLog);
-            loggerFactory.info(jsonString);
+            if ("ERROR".equals(webLog.getStatus())) {
+                loggerFactory.error(jsonString,webLog.getThrowable());
+            }else {
+                loggerFactory.info(jsonString);
+            }
         }
         return result;
     }

@@ -18,41 +18,6 @@
         </encoder>
     </appender>
 
-    <appender name="LOG_STASH_DEBUG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>192.168.108.128:4560</destination>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
-        </filter>
-        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
-            <providers>
-                <timestamp>
-                    <timeZone>Asia/Shanghai</timeZone>
-                </timestamp>
-                <!--自定义日志输出格式-->
-                <pattern>
-                    <pattern>
-                        {
-                        "project": "mall-cli",
-                        "level": "%level",
-                        "service": "${APP_NAME:-}",
-                        "pid": "${PID:-}",
-                        "thread": "%thread",
-                        "class": "%logger",
-                        "message": "%message",
-                        "stack_trace": "%exception{20}"
-                        }
-                    </pattern>
-                </pattern>
-            </providers>
-        </encoder>
-        <!--当有多个LogStash服务时，设置访问策略为轮询-->
-        <connectionStrategy>
-            <roundRobin>
-                <connectionTTL>5 minutes</connectionTTL>
-            </roundRobin>
-        </connectionStrategy>
-    </appender>
-
     <!--ERROR日志输出到LogStash-->
     <appender name="LOG_STASH_ERROR" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -60,7 +25,7 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <destination>192.168.108.128:4561</destination>
+        <destination>192.168.108.128:4560</destination>
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp>
@@ -93,13 +58,15 @@
 
     <root level="DEBUG">
         <appender-ref ref="console"/>
-        <appender-ref ref="LOG_STASH_DEBUG" />
-        <appender-ref ref="LOG_STASH_ERROR" />
+        <appender-ref ref="LOG_STASH_ERROR"/>
     </root>
 
     <!--自定义接口访问记录日志输出到LogStash-->
-    <appender name="LOG_STASH_RECORD" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>192.168.108.128:4562</destination>
+    <appender name="LOG_STASH_DEBUG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>192.168.108.128:4561</destination>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+        </filter>
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp>
@@ -109,7 +76,7 @@
                 <pattern>
                     <pattern>
                         {
-                        "project": "mall-debug",
+                        "project": "mall",
                         "level": "%level",
                         "service": "${APP_NAME:-}",
                         "class": "%logger",
@@ -127,9 +94,11 @@
         </connectionStrategy>
     </appender>
 
+
     <!-- 使用指定包下面的日志-->
-    <logger name="com.tang.mall.common.log.WebAspectLog" level="INFO">
-        <appender-ref ref="LOG_STASH_RECORD"/>
+    <logger name="com.tang.mall.common.log.WebAspectLog" level="DEBUG">
+        <appender-ref ref="LOG_STASH_DEBUG"/>
     </logger>
+
 
 </configuration>

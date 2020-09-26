@@ -1,5 +1,7 @@
 package com.tang.mall.common.log;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 
@@ -49,7 +51,8 @@ public class WebLog {
     /**
      * 异常信息
      */
-    private String throwableMessage;
+    @JSONField(serialize = false)
+    private Throwable throwable;
 
     /**
      * 状态 NORMAL,ERROR
